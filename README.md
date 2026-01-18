@@ -120,12 +120,23 @@ const config = {
 
 ### ESM Plugin Imports
 
-When using Jodit's ESM build, some toolbar buttons require their plugins to be imported explicitly. Add these imports to enable the corresponding features:
+When using Jodit's ESM build (`jodit/esm/index.js`), some plugins are not included by default and must be imported explicitly.
+
+**Important:** The source plugin is required for source mode (mode 2) and split mode (mode 3) to work:
 
 ```js
-// Source code editing (source button)
-import 'jodit/esm/plugins/source/source.js';
+import { Jodit } from 'jodit/esm/index.js';
+import 'jodit/es2021/jodit.min.css';
 
+// REQUIRED: Source plugin for source/split mode editing
+import 'jodit/esm/plugins/source/source.js';
+```
+
+Without this import, switching to source mode will show an empty editor even though the content is preserved internally.
+
+#### Other optional plugins
+
+```js
 // Fullscreen mode (fullsize button)
 import 'jodit/esm/plugins/fullsize/fullsize.js';
 
@@ -138,8 +149,6 @@ import 'jodit/esm/plugins/print/print.js';
 // Eraser button + HTML cleaning (eraser button)
 import 'jodit/esm/plugins/clean-html/clean-html.js';
 ```
-
-Without these imports, the corresponding toolbar buttons will appear but won't function.
 
 ### Development
 
