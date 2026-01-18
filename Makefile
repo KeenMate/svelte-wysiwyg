@@ -15,7 +15,7 @@ VER ?= 5
 PKG_NAME = @keenmate/svelte-wysiwyg-v$(VER)
 PKG_DIR = packages/svelte-wysiwyg-v$(VER)
 
-.PHONY: setup dev dev4 dev5 build package create-link unlink publish publish-rc publish-dry clean help
+.PHONY: setup dev dev4 dev5 build package create-link unlink publish publish-rc publish-all publish-all-rc publish-dry clean help
 
 # Default target
 help:
@@ -35,10 +35,12 @@ help:
 	@echo   unlink       - Remove global npm link
 	@echo.
 	@echo Publishing:
-	@echo   publish      - Publish to npm (default: v5)
+	@echo   publish      - Publish stable version to npm (latest tag)
 	@echo   publish VER=4- Publish Svelte 4 version
-	@echo   publish-rc   - Publish RC/prerelease version
-	@echo   publish-dry  - Dry run publish
+	@echo   publish-rc   - Publish RC/prerelease version to npm (rc tag)
+	@echo   publish-all  - Publish both v4 and v5 stable versions
+	@echo   publish-all-rc - Publish both v4 and v5 RC versions
+	@echo   publish-dry  - Dry run publish (show what would be published)
 	@echo.
 	@echo Cleanup:
 	@echo   clean        - Clean build artifacts
@@ -110,25 +112,52 @@ unlink:
 	@echo Link removed successfully!
 	@echo.
 
+# Published package name (both versions publish under the same name)
+PUBLISH_NAME = @keenmate/svelte-wysiwyg
+
 publish: package
 	@echo.
-	@echo Publishing $(PKG_NAME) to npm...
+	@echo Publishing $(PKG_NAME) as $(PUBLISH_NAME) to npm...
 	@echo.
-	cd $(PKG_DIR) && npm publish --access public
+	cd $(PKG_DIR) && npm pkg set name=$(PUBLISH_NAME) && npm publish --access public && npm pkg set name=$(PKG_NAME)
 	@echo.
 	@echo Published successfully!
 
 publish-rc: package
 	@echo.
-	@echo Publishing $(PKG_NAME) RC version to npm...
+	@echo Publishing $(PKG_NAME) as $(PUBLISH_NAME) RC version to npm...
 	@echo.
-	cd $(PKG_DIR) && npm publish --access public --tag rc
+	cd $(PKG_DIR) && npm pkg set name=$(PUBLISH_NAME) && npm publish --access public --tag rc && npm pkg set name=$(PKG_NAME)
 	@echo.
 	@echo Published successfully with tag 'rc'!
 
 publish-dry: package
-	@echo Dry run - showing what would be published for $(PKG_NAME)...
-	cd $(PKG_DIR) && npm publish --dry-run
+	@echo Dry run - showing what would be published for $(PKG_NAME) as $(PUBLISH_NAME)...
+	cd $(PKG_DIR) && npm pkg set name=$(PUBLISH_NAME) && npm publish --dry-run && npm pkg set name=$(PKG_NAME)
+
+publish-all:
+	@echo.
+	@echo Publishing both v4 and v5 as $(PUBLISH_NAME) to npm...
+	@echo.
+	@echo === Building and publishing v4 (v1.x) ===
+	cd packages/svelte-wysiwyg-v4 && npm run build && npm pkg set name=$(PUBLISH_NAME) && npm publish --access public && npm pkg set name=@keenmate/svelte-wysiwyg-v4
+	@echo.
+	@echo === Building and publishing v5 (v2.x) ===
+	cd packages/svelte-wysiwyg-v5 && npm run build && npm pkg set name=$(PUBLISH_NAME) && npm publish --access public && npm pkg set name=@keenmate/svelte-wysiwyg-v5
+	@echo.
+	@echo Both versions published successfully!
+
+publish-all-rc:
+	@echo.
+	@echo Publishing both v4 and v5 as $(PUBLISH_NAME) RC versions to npm...
+	@echo.
+	@echo === Building and publishing v4 RC (v1.x) ===
+	cd packages/svelte-wysiwyg-v4 && npm run build && npm pkg set name=$(PUBLISH_NAME) && npm publish --access public --tag rc && npm pkg set name=@keenmate/svelte-wysiwyg-v4
+	@echo.
+	@echo === Building and publishing v5 RC (v2.x) ===
+	cd packages/svelte-wysiwyg-v5 && npm run build && npm pkg set name=$(PUBLISH_NAME) && npm publish --access public --tag rc && npm pkg set name=@keenmate/svelte-wysiwyg-v5
+	@echo.
+	@echo Both RC versions published successfully!
 
 clean:
 	@echo Cleaning build artifacts...

@@ -1,18 +1,17 @@
 <script>
-	import WysiwygEditor, { createModeToggle } from '@keenmate/svelte-wysiwyg-v5';
+	import WysiwygEditor, { createModeToggle } from '../index.js';
 	import 'jodit/es2021/jodit.min.css';
 	import { Jodit } from 'jodit/esm/index.js';
-	// These plugins are not included in ESM by default - import explicitly
 	import 'jodit/esm/plugins/source/source.js';
 	import 'jodit/esm/plugins/fullsize/fullsize.js';
 	import 'jodit/esm/plugins/preview/preview.js';
 	import 'jodit/esm/plugins/print/print.js';
 	import 'jodit/esm/plugins/clean-html/clean-html.js';
 
-	let editorValue = $state(`<p>Edit this content to test the toolbar.</p>`);
-	let editorMode = $state(1);
+	let editorValue = `<p>Edit this content to test the toolbar.</p>`;
+	let editorMode = 1;
 
-	// Available button groups
+	// Button groups
 	const buttonGroups = {
 		'Font Style': ['bold', 'italic', 'underline', 'strikethrough'],
 		'Lists': ['ul', 'ol'],
@@ -61,24 +60,12 @@
 		]
 	};
 
-	// Selected buttons (without separators for easier management)
-	let selectedButtons = $state(new Set(['bold', 'italic', 'underline', 'ul', 'ol', 'link', 'undo', 'redo', 'source']));
+	let selectedButtons = new Set(['bold', 'italic', 'underline', 'ul', 'ol', 'link', 'undo', 'redo', 'source']);
+	let useSeparators = true;
+	let includeCustomModeToggle = false;
 
-	// Include separators between groups
-	let useSeparators = $state(true);
-
-	// Include custom mode toggle button
-	let includeCustomModeToggle = $state(false);
-
-	// Editor key for recreation
-	let editorKey = $state(0);
-
-	function recreateEditor() {
-		editorKey++;
-	}
-
-	// Build the buttons array from selection
-	function buildButtonsArray() {
+	// Parameters are for Svelte reactivity tracking, values accessed via closure
+	function buildButtonsArray(_selectedButtons, _useSeparators, _includeCustomModeToggle) {
 		const buttons = [];
 		let lastWasButton = false;
 
@@ -94,7 +81,6 @@
 			}
 		}
 
-		// Add custom mode toggle if enabled
 		if (includeCustomModeToggle) {
 			if (useSeparators && lastWasButton) {
 				buttons.push('|');
@@ -106,58 +92,14 @@
 		return buttons;
 	}
 
-	// Get current buttons config
-	let currentButtons = $derived(buildButtonsArray());
+	// Reactive - pass dependencies to force Svelte 4 to track them
+	$: currentButtons = buildButtonsArray(selectedButtons, useSeparators, includeCustomModeToggle);
+	$: editorConfig = { buttons: currentButtons };
+	// Use a string key based on button selection to force editor recreation
+	$: editorKey = Array.from(selectedButtons).sort().join(',') + '|' + useSeparators + '|' + includeCustomModeToggle;
 
-	// Build config
-	let editorConfig = $derived({
-		buttons: currentButtons
-	});
-
-	function applyPreset(presetName) {
-		const preset = presets[presetName];
-		selectedButtons = new Set(preset.filter(b => b !== '|'));
-		recreateEditor();
-	}
-
-	function toggleButton(button) {
-		const newSet = new Set(selectedButtons);
-		if (newSet.has(button)) {
-			newSet.delete(button);
-		} else {
-			newSet.add(button);
-		}
-		selectedButtons = newSet;
-		recreateEditor();
-	}
-
-	function selectAll() {
-		const allButtons = Object.values(buttonGroups).flat();
-		selectedButtons = new Set(allButtons);
-		recreateEditor();
-	}
-
-	function selectNone() {
-		selectedButtons = new Set();
-		recreateEditor();
-	}
-
-	function toggleSeparators() {
-		useSeparators = !useSeparators;
-		recreateEditor();
-	}
-
-	function toggleModeToggle() {
-		includeCustomModeToggle = !includeCustomModeToggle;
-		recreateEditor();
-	}
-
-	function handleReady(instance) {
-		console.log('Editor ready with toolbar:', currentButtons);
-	}
-
-	// Generate code example
-	let codeExample = $derived(() => {
+	// Code example generation
+	$: codeExample = (() => {
 		const buttonStrings = [];
 		let lastWasButton = false;
 
@@ -185,7 +127,43 @@
     ${buttonStrings.join(', ')}
   ]
 };`;
-	});
+	})();
+
+	function applyPreset(presetName) {
+		const preset = presets[presetName];
+		selectedButtons = new Set(preset.filter(b => b !== '|'));
+	}
+
+	function toggleButton(button) {
+		const newSet = new Set(selectedButtons);
+		if (newSet.has(button)) {
+			newSet.delete(button);
+		} else {
+			newSet.add(button);
+		}
+		selectedButtons = newSet;
+	}
+
+	function selectAll() {
+		const allButtons = Object.values(buttonGroups).flat();
+		selectedButtons = new Set(allButtons);
+	}
+
+	function selectNone() {
+		selectedButtons = new Set();
+	}
+
+	function toggleSeparators() {
+		useSeparators = !useSeparators;
+	}
+
+	function toggleModeToggle() {
+		includeCustomModeToggle = !includeCustomModeToggle;
+	}
+
+	function handleReady(instance) {
+		console.log('Editor ready with toolbar:', currentButtons);
+	}
 </script>
 
 <div class="card">
@@ -193,9 +171,9 @@
 	<p>Quick-start with a predefined toolbar configuration.</p>
 
 	<div class="preset-buttons">
-		<button onclick={() => applyPreset('minimal')}>Minimal</button>
-		<button onclick={() => applyPreset('standard')}>Standard</button>
-		<button onclick={() => applyPreset('full')}>Full</button>
+		<button on:click={() => applyPreset('minimal')}>Minimal</button>
+		<button on:click={() => applyPreset('standard')}>Standard</button>
+		<button on:click={() => applyPreset('full')}>Full</button>
 	</div>
 </div>
 
@@ -204,14 +182,14 @@
 	<p>Toggle individual buttons to include in the toolbar.</p>
 
 	<div class="selection-controls">
-		<button class="secondary" onclick={selectAll}>Select All</button>
-		<button class="secondary" onclick={selectNone}>Select None</button>
+		<button class="secondary" on:click={selectAll}>Select All</button>
+		<button class="secondary" on:click={selectNone}>Select None</button>
 		<label class="inline-checkbox">
-			<input type="checkbox" checked={useSeparators} onchange={toggleSeparators} />
+			<input type="checkbox" checked={useSeparators} on:change={toggleSeparators} />
 			<span>Add separators between groups</span>
 		</label>
 		<label class="inline-checkbox">
-			<input type="checkbox" checked={includeCustomModeToggle} onchange={toggleModeToggle} />
+			<input type="checkbox" checked={includeCustomModeToggle} on:change={toggleModeToggle} />
 			<span>Include custom mode toggle</span>
 		</label>
 	</div>
@@ -226,7 +204,7 @@
 							<input
 								type="checkbox"
 								checked={selectedButtons.has(button)}
-								onchange={() => toggleButton(button)}
+								on:change={() => toggleButton(button)}
 							/>
 							<code>{button}</code>
 						</label>
@@ -235,7 +213,6 @@
 			</div>
 		{/each}
 	</div>
-
 </div>
 
 <div class="card">
@@ -258,19 +235,17 @@
 <div class="card">
 	<h2>Generated Code</h2>
 	<p>Copy this configuration to use in your project.</p>
-
-	<pre class="code-display">{codeExample()}</pre>
+	<pre class="code-display">{codeExample}</pre>
 </div>
 
 <div class="card">
 	<h2>Custom Button Example</h2>
 	<p>Create your own buttons with custom behavior.</p>
-
 	<pre class="code-display">{`// Define a custom button
 const insertDateButton = {
   name: 'insertDate',
   tooltip: 'Insert current date',
-  icon: '<svg>...</svg>',  // SVG string or use iconURL
+  icon: '<svg>...</svg>',
   exec: (editor) => {
     const date = new Date().toLocaleDateString();
     editor.selection.insertHTML('<strong>' + date + '</strong>');
@@ -345,7 +320,6 @@ const config = {
 		border: 1px solid #e2e8f0;
 		border-radius: 4px;
 		cursor: pointer;
-		transition: all 0.15s;
 	}
 
 	.button-option:hover {
@@ -393,7 +367,6 @@ const config = {
 		border-radius: 6px;
 		font-size: 0.9rem;
 		cursor: pointer;
-		transition: background 0.2s;
 	}
 
 	button:hover {

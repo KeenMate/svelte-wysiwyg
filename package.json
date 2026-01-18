@@ -1,5 +1,5 @@
 {
-	"name": "svelte-wysiwyg-workspace",
+	"name": "svelte-wysiwyg",
 	"version": "1.0.0",
 	"private": true,
 	"workspaces": [

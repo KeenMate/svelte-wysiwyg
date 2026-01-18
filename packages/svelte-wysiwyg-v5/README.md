@@ -1,22 +1,16 @@
-## @keenmate/svelte-wysiwyg
+# @keenmate/svelte-wysiwyg
 
-Svelte wrapper component for the [Jodit WYSIWYG editor](https://xdsoft.net/jodit/).
+Svelte 5 wrapper component for the [Jodit WYSIWYG editor](https://xdsoft.net/jodit/).
 
-### Installation
+> **Note:** This is the Svelte 5 version (v2.x). For Svelte 4, use v1.x: `npm i @keenmate/svelte-wysiwyg@1`
 
-**For Svelte 5:** (v2.x)
+## Installation
+
 ```bash
 npm i @keenmate/svelte-wysiwyg@2 jodit
 ```
 
-**For Svelte 4:** (v1.x)
-```bash
-npm i @keenmate/svelte-wysiwyg@1 jodit
-```
-
-### Usage
-
-#### Svelte 5
+## Usage
 
 ```svelte
 <script>
@@ -44,35 +38,7 @@ npm i @keenmate/svelte-wysiwyg@1 jodit
 />
 ```
 
-#### Svelte 4
-
-```svelte
-<script>
-  import WysiwygEditor from '@keenmate/svelte-wysiwyg';
-  import 'jodit/es2021/jodit.min.css';
-  import { Jodit } from 'jodit/esm/index.js';
-
-  let editorValue = '<p>Hello World</p>';
-
-  function handleReady(editor) {
-    console.log('Editor ready:', editor.isReady);
-  }
-
-  function handleInput({ data }) {
-    console.log('Content changed:', data);
-  }
-</script>
-
-<WysiwygEditor
-  editorConstructor={Jodit}
-  bind:value={editorValue}
-  config={{ height: 400 }}
-  onReady={handleReady}
-  onInput={handleInput}
-/>
-```
-
-### Props
+## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -84,6 +50,8 @@ npm i @keenmate/svelte-wysiwyg@1 jodit
 | `readonly` | `boolean` | `false` | Read-only mode (dynamic) |
 | `height` | `number \| string` | - | Editor height |
 | `width` | `number \| string` | - | Editor width |
+| `maxHeight` | `number \| string` | - | Maximum editor height |
+| `maxWidth` | `number \| string` | - | Maximum editor width |
 | `placeholder` | `string` | - | Placeholder text |
 | `theme` | `'default' \| 'dark'` | `'default'` | Editor theme |
 | `toolbar` | `boolean` | `true` | Show toolbar |
@@ -94,7 +62,7 @@ npm i @keenmate/svelte-wysiwyg@1 jodit
 | `iframe` | `boolean` | `false` | Render in iframe |
 | `spellcheck` | `boolean` | `true` | Enable spellcheck |
 
-### Callback Props
+## Callback Props
 
 | Prop | Signature | Description |
 |------|-----------|-------------|
@@ -105,7 +73,7 @@ npm i @keenmate/svelte-wysiwyg@1 jodit
 | `onBlur` | `({ evt: FocusEvent, instance: Jodit }) => void` | Called on editor blur |
 | `onDestroy` | `(instance: Jodit) => void` | Called when component is destroyed |
 
-### Custom Toolbar Buttons
+## Custom Toolbar Buttons
 
 ```js
 import { createModeToggle } from '@keenmate/svelte-wysiwyg';
@@ -118,7 +86,7 @@ const config = {
 };
 ```
 
-### ESM Plugin Imports
+## ESM Plugin Imports
 
 When using Jodit's ESM build, some toolbar buttons require their plugins to be imported explicitly. Add these imports to enable the corresponding features:
 
@@ -141,45 +109,11 @@ import 'jodit/esm/plugins/clean-html/clean-html.js';
 
 Without these imports, the corresponding toolbar buttons will appear but won't function.
 
-### Development
+## Requirements
 
-This is a monorepo using npm workspaces. The structure is:
+- Svelte 5.x
+- Jodit 4.x
 
-```
-svelte-wysiwyg/
-├── packages/
-│   ├── svelte-wysiwyg-v4/   # Svelte 4 version (@keenmate/svelte-wysiwyg v1.x)
-│   └── svelte-wysiwyg-v5/   # Svelte 5 version (@keenmate/svelte-wysiwyg v2.x)
-└── docs/                    # Examples and documentation (uses v5)
-```
-
-#### Setup
-
-```bash
-npm install    # Install all workspace dependencies
-```
-
-#### Development Server
-
-```bash
-make dev           # Start Svelte 5 dev server (docs)
-make dev VER=4     # Start Svelte 4 dev server
-make dev4          # Shortcut for Svelte 4
-make dev5          # Shortcut for Svelte 5
-```
-
-#### Build & Publish
-
-```bash
-make build         # Build Svelte 5 package
-make build VER=4   # Build Svelte 4 package
-make build VER=all # Build all packages + docs
-make package       # Package v5 for publishing
-make package VER=4 # Package v4 for publishing
-make publish       # Publish v5 to npm
-make publish VER=4 # Publish v4 to npm
-```
-
-### License
+## License
 
 MIT

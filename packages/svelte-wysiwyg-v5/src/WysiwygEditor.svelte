@@ -200,3 +200,58 @@
 </script>
 
 <div bind:this={editorElement}></div>
+
+<style>
+    /*
+     * Defensive styles for Jodit editor content area.
+     * These ensure proper rendering even when aggressive CSS resets
+     * (like * { margin: 0; padding: 0; }) are used on the page.
+     */
+    :global(.jodit-wysiwyg ul),
+    :global(.jodit-wysiwyg ol) {
+        padding-left: 2em;
+        margin: 0.5em 0;
+        list-style-position: outside;
+    }
+
+    :global(.jodit-wysiwyg ul) {
+        list-style-type: disc;
+    }
+
+    :global(.jodit-wysiwyg ul ul) {
+        list-style-type: circle;
+    }
+
+    :global(.jodit-wysiwyg ul ul ul) {
+        list-style-type: square;
+    }
+
+    :global(.jodit-wysiwyg ol) {
+        list-style-type: decimal;
+    }
+
+    :global(.jodit-wysiwyg li) {
+        margin: 0.25em 0;
+    }
+
+    :global(.jodit-wysiwyg p) {
+        margin: 0 0 1em 0;
+    }
+
+    :global(.jodit-wysiwyg blockquote) {
+        margin: 1em 0;
+        padding-left: 1em;
+        border-left: 3px solid #ccc;
+    }
+
+    :global(.jodit-wysiwyg table) {
+        border-collapse: collapse;
+        margin: 1em 0;
+    }
+
+    :global(.jodit-wysiwyg table td),
+    :global(.jodit-wysiwyg table th) {
+        border: 1px solid #ccc;
+        padding: 0.5em;
+    }
+</style>

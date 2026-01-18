@@ -1,6 +1,6 @@
 {
 	"name": "@keenmate/svelte-wysiwyg-v5",
-	"version": "5.0.0",
+	"version": "2.0.0-rc01",
 	"description": "Svelte 5 WYSIWYG editor component (Jodit-based)",
 	"type": "module",
 	"main": "./dist/svelte-wysiwyg.umd.js",

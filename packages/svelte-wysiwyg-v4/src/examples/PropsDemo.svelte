@@ -1,33 +1,32 @@
 <script>
-	import WysiwygEditor from '@keenmate/svelte-wysiwyg-v5';
+	import WysiwygEditor from '../index.js';
 	import 'jodit/es2021/jodit.min.css';
 	import { Jodit } from 'jodit/esm/index.js';
-	// Source plugin is not included in ESM by default - import it explicitly
 	import 'jodit/esm/plugins/source/source.js';
 
-	let editorValue = $state(`<p>Edit this content to test the editor.</p>`);
+	let editorValue = `<p>Edit this content to test the editor.</p>`;
 
-	// Dynamic props (can change at runtime)
-	let disabled = $state(false);
-	let readonly = $state(false);
+	// Dynamic props
+	let disabled = false;
+	let readonly = false;
 
-	// Static props (merged into config at init - require recreate to change)
-	let height = $state(300);
-	let width = $state('100%');
-	let maxHeight = $state(''); // empty = no limit, accepts: 600, 600px, 50%, 30rem, etc.
-	let maxWidth = $state(''); // empty = no limit
-	let placeholder = $state('Start typing here...');
-	let theme = $state('default');
-	let toolbar = $state(true);
-	let statusbar = $state(true);
-	let language = $state('en');
-	let direction = $state('ltr');
-	let enter = $state('p');
-	let iframe = $state(false);
-	let spellcheck = $state(true);
+	// Static props
+	let height = 300;
+	let width = '100%';
+	let maxHeight = '';
+	let maxWidth = '';
+	let placeholder = 'Start typing here...';
+	let theme = 'default';
+	let toolbar = true;
+	let statusbar = true;
+	let language = 'en';
+	let direction = 'ltr';
+	let enter = 'p';
+	let iframe = false;
+	let spellcheck = true;
 
-	// Key to force recreation of editor when static props change
-	let editorKey = $state(0);
+	// Key for recreation
+	let editorKey = 0;
 
 	function recreateEditor() {
 		editorKey++;
@@ -37,23 +36,38 @@
 		console.log('Editor ready:', instance);
 	}
 
-	// Helper to get numeric value from string (for range slider)
 	function getNumericValue(val) {
 		if (!val) return 0;
 		const num = parseInt(val, 10);
 		return isNaN(num) ? 0 : num;
 	}
 
-	// Helper to set value from range slider (preserves unit if present)
 	function setFromRange(current, newNum) {
 		if (!current || /^\d+$/.test(current)) {
-			// No unit or just a number - return plain number or empty
 			return newNum === 0 ? '' : String(newNum);
 		}
-		// Extract unit and apply new number
 		const unit = current.replace(/[\d.]+/, '');
 		return newNum === 0 ? '' : `${newNum}${unit}`;
 	}
+
+	// Reactive props display
+	$: propsDisplay = JSON.stringify({
+		disabled,
+		readonly,
+		height,
+		width,
+		maxHeight: maxHeight || undefined,
+		maxWidth: maxWidth || undefined,
+		placeholder,
+		theme,
+		toolbar,
+		statusbar,
+		language,
+		direction,
+		enter,
+		iframe,
+		spellcheck
+	}, null, 2);
 </script>
 
 <div class="card">
@@ -94,7 +108,7 @@
 				<input
 					type="range"
 					value={getNumericValue(maxHeight)}
-					oninput={(e) => maxHeight = setFromRange(maxHeight, +e.target.value)}
+					on:input={(e) => maxHeight = setFromRange(maxHeight, +e.target.value)}
 					min="0" max="1000" step="50"
 				/>
 				<input
@@ -111,7 +125,7 @@
 				<input
 					type="range"
 					value={getNumericValue(maxWidth)}
-					oninput={(e) => maxWidth = setFromRange(maxWidth, +e.target.value)}
+					on:input={(e) => maxWidth = setFromRange(maxWidth, +e.target.value)}
 					min="0" max="1200" step="50"
 				/>
 				<input
@@ -186,7 +200,7 @@
 	</div>
 
 	<div style="margin-top: 1rem;">
-		<button onclick={recreateEditor}>Recreate Editor</button>
+		<button on:click={recreateEditor}>Recreate Editor</button>
 		<span style="margin-left: 1rem; color: #718096; font-size: 0.875rem;">
 			Apply static prop changes
 		</span>
@@ -224,25 +238,7 @@
 
 <div class="card">
 	<h2>Current Props</h2>
-	<pre class="props-display">{JSON.stringify({
-	// Dynamic
-	disabled,
-	readonly,
-	// Static
-	height,
-	width,
-	maxHeight: maxHeight || undefined,
-	maxWidth: maxWidth || undefined,
-	placeholder,
-	theme,
-	toolbar,
-	statusbar,
-	language,
-	direction,
-	enter,
-	iframe,
-	spellcheck
-}, null, 2)}</pre>
+	<pre class="props-display">{propsDisplay}</pre>
 </div>
 
 <style>
@@ -262,7 +258,7 @@
 	.control-item span {
 		color: #4a5568;
 		font-weight: 500;
-		font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+		font-family: monospace;
 	}
 
 	.control-item input[type="text"],
@@ -272,14 +268,6 @@
 		border: 1px solid #e2e8f0;
 		border-radius: 6px;
 		font-size: 0.875rem;
-		background: white;
-	}
-
-	.control-item input:focus,
-	.control-item select:focus {
-		outline: none;
-		border-color: #667eea;
-		box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 	}
 
 	.control-item.checkbox {
@@ -288,31 +276,13 @@
 		gap: 0.5rem;
 	}
 
-	.control-item.checkbox input[type="checkbox"] {
+	.control-item.checkbox input {
 		width: 18px;
 		height: 18px;
-		cursor: pointer;
-	}
-
-	.control-item.checkbox span {
-		cursor: pointer;
 	}
 
 	.control-item.range-control {
 		grid-column: span 2;
-	}
-
-	.control-item.range-control span {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.control-item.range-control code {
-		background: #e2e8f0;
-		padding: 0.1rem 0.4rem;
-		border-radius: 4px;
-		font-size: 0.8rem;
 	}
 
 	.range-inputs {
@@ -323,8 +293,6 @@
 
 	.range-inputs input[type="range"] {
 		flex: 1;
-		height: 6px;
-		cursor: pointer;
 	}
 
 	.range-inputs input[type="text"] {
@@ -332,7 +300,6 @@
 		padding: 0.4rem;
 		border: 1px solid #e2e8f0;
 		border-radius: 6px;
-		font-size: 0.875rem;
 	}
 
 	.editor-container {
@@ -358,10 +325,16 @@
 		border-radius: 6px;
 		font-size: 0.9rem;
 		cursor: pointer;
-		transition: background 0.2s;
 	}
 
 	button:hover {
 		background: #5a67d8;
+	}
+
+	code {
+		background: #e2e8f0;
+		padding: 0.1rem 0.4rem;
+		border-radius: 4px;
+		font-size: 0.8rem;
 	}
 </style>

@@ -7,6 +7,9 @@ import { readFileSync } from 'fs';
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
+	server: {
+		port: 12540
+	},
 	plugins: [
 		svelte()
 	],
@@ -32,5 +35,7 @@ export default defineConfig({
 				}
 			}
 		}
-	}
+	},
+	// Multi-page app support for dev server
+	appType: 'mpa'
 });

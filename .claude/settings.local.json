@@ -7,7 +7,9 @@
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
       "WebFetch(domain:xdsoft.net)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(make publish-dry:*)",
+      "Bash(npm pkg:*)"
     ]
   }
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Svelte WYSIWYG v4 - Basic Example</title>
+    <link rel="stylesheet" href="/examples-shared.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">&larr; Back to Examples</a>
+            <h1>&#x1F4DD; Basic Example</h1>
+            <p class="subtitle">Core editor features with two-way binding and mode switching</p>
+        </header>
+
+        <div id="app"></div>
+
+        <div class="card">
+            <h2>Keyboard Navigation</h2>
+            <p>The editor supports standard text editing keyboard shortcuts in both WYSIWYG and Source modes.</p>
+
+            <div class="grid-2">
+                <div>
+                    <h3>WYSIWYG Mode</h3>
+                    <ul>
+                        <li><code>Ctrl+B</code> - Bold</li>
+                        <li><code>Ctrl+I</code> - Italic</li>
+                        <li><code>Ctrl+U</code> - Underline</li>
+                        <li><code>Ctrl+Z</code> - Undo</li>
+                        <li><code>Ctrl+Y</code> - Redo</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Source Mode (Ace)</h3>
+                    <ul>
+                        <li><code>Tab</code> - Indent</li>
+                        <li><code>Shift+Tab</code> - Outdent</li>
+                        <li><code>Ctrl+/</code> - Toggle comment</li>
+                        <li><code>Ctrl+F</code> - Find</li>
+                        <li><code>Ctrl+H</code> - Find and replace</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Svelte WYSIWYG Component by <a href="https://github.com/keenmate">Keenmate</a></p>
+        </footer>
+    </div>
+
+    <script type="module" src="/src/examples/main.js"></script>
+</body>
+</html>
