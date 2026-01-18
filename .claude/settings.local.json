@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:svelte.dev)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:xdsoft.net)",
+      "Bash(grep:*)"
+    ]
+  }
+}

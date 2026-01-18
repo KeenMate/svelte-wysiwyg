@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Svelte WYSIWYG - Editor Component</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        .card-description {
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .card-features li {
+            padding: 0.5rem 0;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.875rem;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-features li:before {
+            content: "\2713";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .badge.new {
+            background: #f56565;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Svelte WYSIWYG</h1>
+            <p class="subtitle">Svelte wrapper component for Jodit WYSIWYG editor</p>
+            <span class="version-badge">v5.0.0</span>
+        </header>
+
+        <div class="cards">
+            <!-- Basic Example -->
+            <a href="examples-basic.html" class="card">
+                <div class="card-icon">&#x1F4DD;</div>
+                <h2 class="card-title">Basic Example</h2>
+                <p class="card-description">
+                    Full-featured demo with two-way binding, mode switching, Ace editor settings, and live output preview.
+                </p>
+                <ul class="card-features">
+                    <li>Two-way value and mode binding</li>
+                    <li>WYSIWYG and Source modes</li>
+                    <li>Ace theme and settings controls</li>
+                    <li>Read-only toggle</li>
+                    <li>Live HTML output preview</li>
+                </ul>
+            </a>
+
+            <!-- Component Props -->
+            <a href="examples-props.html" class="card">
+                <div class="card-icon">&#x1F9E9;</div>
+                <h2 class="card-title">Component Props</h2>
+                <p class="card-description">
+                    Interactive configuration of all JoditEditor component props with live preview.
+                </p>
+                <ul class="card-features">
+                    <li>Dynamic props (disabled, readonly)</li>
+                    <li>Dimensions (height, width)</li>
+                    <li>Theme and language settings</li>
+                    <li>Toolbar and statusbar visibility</li>
+                    <li>Props vs config comparison</li>
+                </ul>
+            </a>
+
+            <!-- Toolbar Customization -->
+            <a href="examples-toolbar.html" class="card">
+                <div class="card-icon">&#x1F527;</div>
+                <h2 class="card-title">Toolbar Customization</h2>
+                <p class="card-description">
+                    Build custom toolbars by selecting buttons and creating custom actions.
+                </p>
+                <ul class="card-features">
+                    <li>Preset configurations</li>
+                    <li>Toggle individual buttons</li>
+                    <li>Custom button examples</li>
+                    <li>Generated code output</li>
+                    <li>Live editor preview</li>
+                </ul>
+            </a>
+        </div>
+
+        <footer>
+            <p>
+                Created by <a href="https://github.com/keenmate" target="_blank">Keenmate</a> |
+                <a href="https://github.com/KeenMate/svelte-wysiwyg" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

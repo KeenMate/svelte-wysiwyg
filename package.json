@@ -1,0 +1,15 @@
+{
+	"name": "svelte-wysiwyg-workspace",
+	"version": "1.0.0",
+	"private": true,
+	"workspaces": [
+		"packages/*",
+		"docs"
+	],
+	"scripts": {
+		"dev": "npm run dev -w docs"
+	},
+	"devDependencies": {
+		"sass-embedded": "^1.97.2"
+	}
+}

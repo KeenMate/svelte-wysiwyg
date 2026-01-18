@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jodit Svelte - Component Props</title>
+    <link rel="stylesheet" href="/examples-shared.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">&larr; Back to Examples</a>
+            <h1>&#x1F9E9; Component Props</h1>
+            <p class="subtitle">Interactive configuration of all JoditEditor component props</p>
+        </header>
+
+        <div id="app"></div>
+
+        <div class="card">
+            <h2>Usage</h2>
+            <p>The JoditEditor component accepts props that map directly to Jodit configuration options.</p>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Dynamic Props</h3>
+                    <p>Can be changed at runtime:</p>
+                    <ul>
+                        <li><code>disabled</code> - Completely disable the editor</li>
+                        <li><code>readonly</code> - Content visible but not editable</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Static Props</h3>
+                    <p>Set at initialization (recreate editor to change):</p>
+                    <ul>
+                        <li><code>height</code>, <code>width</code> - Dimensions</li>
+                        <li><code>theme</code> - 'default' or 'dark'</li>
+                        <li><code>placeholder</code> - Empty state text</li>
+                        <li><code>toolbar</code>, <code>statusbar</code> - UI visibility</li>
+                        <li><code>language</code>, <code>direction</code> - i18n</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="note" style="margin-top: 1.5rem;">
+                <div class="note-title">Props vs Config</div>
+                <p>Props are convenience shortcuts. For advanced options (custom buttons, plugins, etc.), use the <code>config</code> prop. Props override config values when both are specified.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Jodit Svelte Component by <a href="https://github.com/keenmate">Keenmate</a></p>
+        </footer>
+    </div>
+
+    <script type="module" src="/src/props-main.js"></script>
+</body>
+</html>

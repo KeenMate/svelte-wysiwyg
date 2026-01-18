@@ -1,0 +1,187 @@
+// Component-specific styles for jodit-svelte demo
+// Base styles are provided by examples-shared.css
+
+// Control Panel (inside a card)
+.control-panel {
+	margin-bottom: 1.5rem;
+}
+
+.panel-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+
+	h3 {
+		margin: 0;
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: #2d3748;
+	}
+}
+
+.mode-badge {
+	font-size: 0.8rem;
+	padding: 0.25rem 0.75rem;
+	background: #667eea;
+	color: white;
+	border-radius: 12px;
+	font-weight: 500;
+}
+
+.panel-content {
+	// No padding needed, card provides it
+}
+
+.controls-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 0.75rem;
+}
+
+.control-item {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	font-size: 0.85rem;
+
+	span {
+		color: #555;
+		font-weight: 500;
+	}
+
+	input[type="text"],
+	input[type="number"],
+	select {
+		padding: 0.4rem 0.5rem;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		font-size: 0.85rem;
+		background: white;
+
+		&:focus {
+			outline: none;
+			border-color: #667eea;
+			box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+		}
+	}
+
+	input[type="number"] {
+		width: 100%;
+	}
+
+	&.checkbox {
+		flex-direction: row;
+		align-items: center;
+		gap: 0.5rem;
+
+		input[type="checkbox"] {
+			width: 16px;
+			height: 16px;
+			cursor: pointer;
+		}
+
+		span {
+			cursor: pointer;
+		}
+	}
+}
+
+// Editor container
+.editor-container {
+	background: white;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Note about settings requiring reload
+.settings-note {
+	font-size: 0.75rem;
+	color: #888;
+	font-style: italic;
+	margin-top: 0.5rem;
+}
+
+// Output Panel (now uses .card class for outer wrapper)
+.output-panel {
+	// Card class provides the wrapper styling
+}
+
+.output-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+
+	h3 {
+		margin: 0;
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: #2d3748;
+	}
+}
+
+.output-tabs {
+	display: flex;
+	gap: 0.5rem;
+
+	button {
+		padding: 0.4rem 0.75rem;
+		border: 1px solid #ccc;
+		background: white;
+		border-radius: 4px;
+		font-size: 0.8rem;
+		cursor: pointer;
+		transition: all 0.2s;
+
+		&:hover {
+			border-color: #667eea;
+			color: #667eea;
+		}
+
+		&.active {
+			background: #667eea;
+			border-color: #667eea;
+			color: white;
+		}
+	}
+}
+
+.output-content {
+	max-height: 300px;
+	overflow: auto;
+	border: 1px solid #e2e8f0;
+	border-radius: 6px;
+}
+
+.html-source {
+	margin: 0;
+	padding: 1rem;
+	font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+	font-size: 0.85rem;
+	line-height: 1.5;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	background: #1e1e1e;
+	color: #d4d4d4;
+}
+
+.html-preview {
+	padding: 1rem;
+
+	// Basic styling for rendered content
+	p {
+		margin: 0 0 1em 0;
+	}
+
+	ul, ol {
+		margin: 0 0 1em 0;
+		padding-left: 2em;
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+}
